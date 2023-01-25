@@ -360,6 +360,10 @@ minetest.register_on_respawnplayer(function(player)
     local last_death = minetest.parse_json(last_death_json)
     local pos = last_death['pos']
 
+    -- remove any HUD from previous bonerelic
+    br.remove_hud(player)
+
+
     -- create relic
     local relic = br.create_relic(player:get_player_name(), last_death['time'], last_death['pos'], br.purple)
 
