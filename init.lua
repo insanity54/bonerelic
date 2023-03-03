@@ -358,6 +358,12 @@ minetest.register_on_respawnplayer(function(player)
     local player_meta = player:get_meta()
     local last_death_json = player_meta:get_string('bonerelic:last_death')
     local last_death = minetest.parse_json(last_death_json)
+
+    -- if the player hasn't a registered last_death, abort
+    -- this can happen if a player was dead before the mod was installed
+    -- logged out without respawning, then after the mod was installed, logged in.
+    if last_death == nil then return end
+
     local pos = last_death['pos']
 
     -- remove any HUD from previous bonerelic
@@ -404,11 +410,14 @@ minetest.register_on_player_inventory_action(function(player, action, inventory,
 
         -- local player_meta = player:get_meta()
         -- local relic_meta = inventory
+        local relic_meta = inventory_info.stack:get_meta()
+        minetest.log("action", player:get_player_name().." takes bonerelic at "..relic_meta:get_string('pos'))
 
         -- -- player is moving a bonerelic from some other inventory to their main inventory
         if inventory_info.listname ~= 'main' then
+
             -- create HUD
-            pos = minetest.parse_json(relic_meta.get_string('pos'))
+            pos = minetest.parse_json(relic_meta:get_string('pos'))
             local hud = br.create_hud(pos, player, br.purple)
             player_meta:set_string('bonerelic:hud', hud)
 
