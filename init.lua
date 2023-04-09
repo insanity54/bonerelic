@@ -106,7 +106,7 @@ function br.create_hud(pos, player, color)
 
     local hud_def = {
         hud_elem_type = "waypoint",
-        name = player:get_player_name().." died here.",
+        name = player:get_player_name().." diedd here.",
         text = " meters away",
         precision = 10,
         number = color,
@@ -239,38 +239,15 @@ minetest.register_node('bonerelic:relic', {
         return itemstack
 
     end,
-    after_dig_node = function(pos, oldnode, oldmetadata, digger)
-        -- local node_meta = minetest.get_meta(pos)
 
-        -- local relic = br.create_relic(
-        --     node_meta:get_string('player_name'),
-        --     node_meta:get_string('time'),
-        --     node_meta:get_string('pos'),
-        --     node_meta:get_int('color')
-        -- )
-        -- return relic
-    end,
     on_drop = function(item, dropper, pos)
 
         br.remove_hud(dropper)
         
 
-        return minetest.item_drop(item, player, pos)
+        return minetest.item_drop(item, dropper, pos)
     end,
-    on_pickup = function(item, picker, pos)
 
-        -- transfer metadata to the picked up item
-        local node_meta = pos:get_meta()
-        local item_meta = item:get_meta()
-        local relic = br.create_relic(
-            node_meta:get_string('player_name'),
-            node_meta:get_string('time'),
-            node_meta:get_string('pos'),
-            node_meta:get_int('color')
-        )
-
-        -- return minetest.item_pickup(relic, picker, pos)
-    end,
     on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
         return minetest.item_move(item, mover, pos)
     end,
